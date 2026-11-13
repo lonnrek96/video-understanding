@@ -57,23 +57,32 @@ VIDEO_PYTHON="$HOME/.local/share/video-understanding/venv/bin/python"
 "$VIDEO_PYTHON" skills/video-understanding/scripts/prepare_video.py "影片链接或本机路径" --output "$HOME/video-evidence/run-001"
 ```
 
-每次使用新的输出目录。`--subtitle captions.srt` 指定字幕；`--language zh` 优先选择中文字幕，或指定语音识别语言；`--interval 5` 加密抽帧；`--model tiny` 提高速度，但识别准确率较低。只有明确不需要转录时才使用 `--skip-asr`。更多参数见 `--help`。
+常用选项：
 
-产物包括 `manifest.json`、`transcript.json`、`timeline.md` 和 `frames/*.jpg`；网络影片还会保留下载文件。脚本不会上传素材，但 AI 读取的图片与文字会按其 host 的政策处理。
+- 先看影片资料：加 `--inspect`，查看时长、章节和下载解析度，不下载影片。
+- 跑到一半停了：用原命令加 `--resume`，已完成且核对无误的部分不用重做。
+- 自己提供字幕：加 `--subtitle captions.srt`。
+- 指定字幕或识别语言：例如 `--language zh`。
+- 多看一些画面：加 `--interval 5`，每 5 秒取一张。
+- 加快语音识别：加 `--model tiny`，但准确率会较低。
+
+一般运行请使用新的输出目录；只有接续原任务才加 `--resume`。只有明确不需要语音转录时才用 `--skip-asr`，其他选项见 `--help`。
+
+产物包括 `manifest.json`、`transcript.json`、`timeline.md`、`frames/*.jpg`、画面总览图和本机进度记录；网络影片还会保留下载文件。脚本不会上传素材，但 AI 读取的图片与文字会按其 host 的政策处理。
 
 ## 免费范围和限制
 
 没有付费 API 或云端推理服务调用。使用者自己的 AI 方案仍可能有订阅费和额度限制，本机计算、储存及网络也由使用者提供。
 
 - 不保证任何链接都可用。私人／已删除影片、登入、DRM、网站限流及改版都可能阻塞获取；不包含自动提取 cookies 或绕过权限。
-- 每次处理一部已结束的影片，不支持直播和播放清单。默认上限为 60 分钟、下载最高 720p、240 张定时画面加 60 张场景画面与一张末段画面。
+- 每次处理一部已结束的影片，不支持直播和播放清单。默认上限为 60 分钟、下载最高 720p、240 张定时画面、60 张场景画面、60 个章节定位与一张末段画面。
 - 抽帧可能漏掉短暂动作；硬字幕由 AI 从画面读取，未内置自动 OCR 或内嵌字幕提取。
 - 语音识别和自动字幕可能出错；无音轨影片会标记为无转录。
 - 影片、字幕、manifest 和本机路径属于工作产物，请保存在 repo 外，只处理有权访问的内容。
 
 ## 验证
 
-[验证纪录](skills/video-understanding/references/validation.md)列出了实际跑通的样片及尚未确认的范围。安装 FFmpeg 后可运行本机测试，不需要网络或下载模型：
+[验证纪录](skills/video-understanding/references/validation.md)列出了实际跑通的样片及尚未确认的范围。安装 FFmpeg 与 Pillow（`python3 -m pip install Pillow`）后可运行本机测试；测试本身不需要网络或下载模型：
 
 ```sh
 python3 -B -m unittest discover -s skills/video-understanding/scripts/tests -v

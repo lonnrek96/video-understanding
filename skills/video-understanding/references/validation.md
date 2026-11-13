@@ -40,3 +40,13 @@ python3 -B -m unittest discover -s scripts/tests -v
 ```
 
 These tests need no network or model download. The standalone installer can be checked against a temporary `--skills-dir`; a second installation must fail without changing existing content. Full real-world recognition and host behavior require separate video trials.
+
+## Recovery and sampling checks
+
+A 64:02 lecture exposed three issues: a combined unknown/over-limit error, subtitles rate-limited with HTTP 429, and an actual 1080p download despite the advertised 720p selector. ASR completed but could not be read until the later visual stage finished. These are observed defects, not inferred cost savings.
+
+This revision adds selection before metadata format resolution plus a downloaded-height guard; separate duration diagnostics/inspection; independent transcript/visual checkpoints, hash-checked resume and a single-writer lock; downscaled scene analysis, chapter anchors and timestamped overview sheets. Originals remain available even when overview representatives are grouped by similarity.
+
+Six local tests passed, including preserved transcript after a simulated visual failure, no retranscription on resume, tampered checkpoint refusal, actual-resolution rejection, and chapter sampling with scene analysis disabled. A real short YouTube acquisition completed and passed the height guard; a metadata-only check on the original lecture now selects 720p and reports its duration/chapters. The lecture has not been re-downloaded or re-transcribed for this revision.
+
+The existing lecture media and its already-completed ASR (converted to a supplied SRT) were also processed locally with a sparse 5-minute overview: 674 segments, 14 original frames and two overview sheets. A repeated `--resume` reused acquisition, transcript and visuals, with the transcript file's modification time unchanged. This checks real artifact reuse, not a new recognition result or dense whole-video inspection.

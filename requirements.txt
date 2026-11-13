@@ -2,3 +2,4 @@
 # Validated with yt-dlp 2026.10.26 and openai-whisper 20250625.
 yt-dlp[default]>=2026.10.26
 openai-whisper>=20250625
+Pillow>=10

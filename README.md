@@ -57,23 +57,32 @@ VIDEO_PYTHON="$HOME/.local/share/video-understanding/venv/bin/python"
 "$VIDEO_PYTHON" skills/video-understanding/scripts/prepare_video.py "VIDEO_URL_OR_PATH" --output "$HOME/video-evidence/run-001"
 ```
 
-Use a new output directory for every run. `--subtitle captions.srt` supplies local captions; `--language en` prefers English captions or sets the ASR language; `--interval 5` samples more densely; `--model tiny` runs faster with lower recognition accuracy. Set `--skip-asr` only when a transcript is intentionally unnecessary. Run `--help` for all options.
+Common options:
 
-Outputs: `manifest.json`, `transcript.json`, `timeline.md` and `frames/*.jpg`; remote runs also retain the downloaded media. Nothing is uploaded by the helper. Frames/text that the agent sends to its AI host are processed under that host's policies.
+- `--inspect`: check duration, chapters and selected resolution without downloading media.
+- `--resume`: continue the identical command after interruption; verified completed work is reused.
+- `--subtitle captions.srt`: use your own captions.
+- `--language en`: prefer English captions or set the speech-recognition language.
+- `--interval 5`: take a frame every five seconds.
+- `--model tiny`: transcribe faster, with lower recognition accuracy.
+
+Use a new output directory unless resuming an existing run. Set `--skip-asr` only when speech transcription is intentionally unnecessary. Run `--help` for all options.
+
+Outputs: `manifest.json`, `transcript.json`, `timeline.md`, `frames/*.jpg`, overview sheets and private checkpoints; remote runs also retain the downloaded media. Nothing is uploaded by the helper. Frames/text that the agent sends to its AI host are processed under that host's policies.
 
 ## Costs and limits
 
 The scripts use no paid API or cloud inference. Your AI host may require a subscription or consume usage quotas. Local compute, storage and internet are supplied by you; this is not unlimited free AI inference.
 
 - Arbitrary URLs are not guaranteed. Private/deleted content, login requirements, DRM, rate limits and site changes can block retrieval. No cookie harvesting or access bypass is included.
-- One completed video per run; live streams and playlists are not supported. Defaults: 60 minutes, downloaded video up to 720p, up to 240 overview frames plus 60 scene samples and a final sample.
+- One completed video per run; live streams and playlists are not supported. Defaults: 60 minutes, downloaded video up to 720p, up to 240 interval frames, 60 scene samples, 60 chapter anchors and a final sample.
 - Samples can miss brief actions. Burned-in text is read by the host from frames; automatic OCR and embedded-subtitle extraction are not bundled.
 - Whisper and automatic captions can mishear or hallucinate. A video with no audio is valid but is marked transcript-unavailable.
 - Downloaded media, captions, manifests and local paths are private working artifacts. Keep them outside this repository. Only process content you are authorized to access.
 
 ## Validation and development
 
-[Validation record](skills/video-understanding/references/validation.md) distinguishes short sample evidence from unverified platform/host coverage. To run the local tests, install FFmpeg and use Python; no model or network download is needed:
+[Validation record](skills/video-understanding/references/validation.md) distinguishes short sample evidence from unverified platform/host coverage. To run the local tests, install FFmpeg and Pillow (`python3 -m pip install Pillow`); test execution needs no model or network download:
 
 ```sh
 python3 -B -m unittest discover -s skills/video-understanding/scripts/tests -v
