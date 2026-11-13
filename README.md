@@ -36,7 +36,7 @@ python -m venv "$env:LOCALAPPDATA\video-understanding\venv"
 python tools/install.py --host codex
 ```
 
-Windows instructions have not been tested. Whisper downloads open model weights on first use and needs local disk space and compute.
+Windows/Ubuntu installation and the offline caption/frame/recovery suite passed [portable checks](https://github.com/lonnrek96/video-understanding/actions/runs/43424232790). Windows Whisper installation and transcription remain unverified. For CPU-only Linux/Windows setups, select the CPU PyTorch build before installing Whisper; see [setup](skills/video-understanding/references/setup.md). Whisper downloads open model weights on first use and needs local disk space and compute.
 
 ## Use
 

@@ -30,7 +30,7 @@ python3 tools/install.py --host codex
 
 安装工具只复制 skill，不会安装系统依赖、修改 host 配置或覆盖已有技能。Codex 支持 `CODEX_HOME`，默认安装到 `~/.codex/skills/video-understanding`。Claude Code 使用 `--host claude-code`；其他兼容工具可用 `--skills-dir /path/to/skills`。安装后刷新技能列表或开启新对话。其他 host 的完整行为尚未验证。
 
-Windows PowerShell（尚未实测）：安装 Python、FFmpeg 和 Node / Deno 后执行：
+Windows PowerShell：安装 Python、FFmpeg 和 Node / Deno 后执行：
 
 ```powershell
 python -m venv "$env:LOCALAPPDATA\video-understanding\venv"
@@ -38,7 +38,7 @@ python -m venv "$env:LOCALAPPDATA\video-understanding\venv"
 python tools/install.py --host codex
 ```
 
-Whisper 首次使用会下载开放模型权重，需要本机储存空间和计算资源。
+Windows／Ubuntu 的安装与离线字幕、画面、接续测试已通过[公开 CI](https://github.com/lonnrek96/video-understanding/actions/runs/43424232790)；Windows 的 Whisper 安装和转录仍未验证。Linux／Windows 只用 CPU 时，先按[设置说明](skills/video-understanding/references/setup.md)选择 CPU 版 PyTorch。Whisper 首次使用会下载开放模型权重，需要本机储存空间和计算资源。
 
 ## 使用
 

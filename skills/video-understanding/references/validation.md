@@ -22,8 +22,8 @@ The above media/ASR trials ran locally without paid inference APIs or extra mode
 
 - Successful end-to-end retrieval on other video platforms, login-protected content and platform automatic-caption retrieval. A Vimeo follow-up attempt failed; see below.
 - General multilingual/noisy speech recognition accuracy, hours-long inspection and rapid-motion completeness. A natural Chinese fallback trial is documented below with observed recognition and timing errors; it does not establish general accuracy.
-- Windows installation, Linux speech recognition/network acquisition, and complete Claude Code/other host behavior. The Linux provided-subtitle path below has been exercised.
-- Implicit selection across other hosts and fresh URL-only acquisition. One fresh Codex CLI session using prepared evidence has been observed below; metadata visibility alone still does not prove selection.
+- Windows ASR/network acquisition, Linux full network-video acquisition, and complete Claude Code/other host behavior. Windows/Ubuntu offline processing and both installation layouts passed CI; Linux natural-speech ASR, resume and remote metadata inspection passed separately below. Installation is not host behavior validation.
+- Implicit selection across other hosts. Fresh Codex CLI selection passed both prepared-evidence and URL-only scenarios below; neither proves every URL or host works.
 
 ## Repeatable local checks
 
@@ -77,7 +77,21 @@ A fresh direct-file download from https://www.w3schools.com/html/mov_bbb.mp4 com
 
 Unknown-height downloader formats are now probed before downloading and rejected when no video height can be established or it exceeds 720p; the downloaded-file guard remains. This fixes missing-dimension handling without accepting an unchecked resolution. Separate MDN/W3C requests failed; a diagnostic for the W3C URL reported an upstream 403 challenge. Neither failure establishes platform support, and no impersonation, cookies or bypass was attempted.
 
-The portable GitHub workflow uses standard Ubuntu/Windows runners, requires FFmpeg rather than silently skipping media checks, runs the offline suite and verifies both install layouts and overwrite refusal. Workflow presence alone is not evidence of a passing Windows run; actual run results are recorded separately.
+The portable GitHub workflow uses standard Ubuntu/Windows runners, requires FFmpeg rather than silently skipping media checks, runs the offline suite and verifies both install layouts and overwrite refusal. Both jobs passed [run 43424232790](https://github.com/lonnrek96/video-understanding/actions/runs/43424232790) at source `f8f4e51`: eight tests per OS plus byte-identical Codex/Claude Code installation and second-install refusal. These are real Windows/Ubuntu script and installation checks; Windows ASR, network acquisition and actual AI host behavior are separate scopes.
+
+## Observed URL-only fresh session
+
+An explicitly approved Codex subscription round (gpt-6.1-sol, medium, one slot) completed in 116.041 seconds. The natural Chinese request contained only the YouTube URL and the explanation goal; it supplied no evidence directory or skill name. The new private environment retained an ordinary skill catalog, with the video skill's sample findings frozen before the earlier result and its processing code updated to the tested revision.
+
+Native records show the complete skill body was read, a new metadata inspection and download/prepare command ran, and new 1280×720 media, 55 manual-caption segments, 84 original frames and seven overview sheets were created. Every segment's text appears in observed tool output. Native rollout outputs contain seven actual overview image blocks and nine original-frame blocks, 16 images total. The chronological explanation, shortcut notification qualification, 3/5/10-second delay menu and historical audio limitation match source evidence; the active host additionally enlarged the countdown, PNG save dialog and delay menu to check those details. This passes the single URL-only Codex scenario, not arbitrary platform/host support or frame-by-frame viewing.
+
+The round belongs to a separate approved two-round/eight-minute ledger; the other round tested agent isolation, not video interpretation. Both rounds together used 150.077 seconds and exhausted the two-round allowance. Private receipts are in `~/.local/state/skillhub-final-native-uats3fz1/`; downloaded source media and transcripts are not redistributed.
+
+## Linux CPU speech fallback
+
+An isolated arm64 `python:3.11-slim` container processed the same 232.421-second Chinese media without sidecar captions, using CPU PyTorch and local Whisper base. It produced 51 segments, nine original frames and one overview; the active host read all segments and viewed the actual overview. Resume reused acquisition, transcript and visuals. A remote metadata inspection of the W3Schools MP4 also succeeded. This verifies Linux local ASR wiring and metadata networking, not a complete Linux network download or accurate recognition: wrong names, early timing and repeated/invented phrases were still present.
+
+The first generic PyTorch dependency installation began fetching unnecessary CUDA packages and was stopped before any ASR result. A fresh container using the official CPU wheel index completed; both temporary containers were removed. Existing local base weights were mounted read-only, not redistributed. The image ID, scripts, output hashes and setup outcome are retained in the private follow-up receipt.
 
 ## Observed fresh-session implicit selection
 

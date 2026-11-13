@@ -11,6 +11,8 @@ python3 -m venv ~/.local/share/video-understanding/venv
 
 Set `VIDEO_PYTHON="$HOME/.local/share/video-understanding/venv/bin/python"` and use `"$VIDEO_PYTHON"` for the script. On Windows use a user-chosen venv and its `Scripts/python.exe`. Installation requires internet/disk space; Whisper depends on PyTorch. On CPU the default `base` model is slower than cloud inference; `--model tiny` is faster but less accurate, `small` is more accurate and heavier. Models download locally on first use. Do not set API keys: there are no paid inference API calls. User AI platform quotas still apply to interpreting frames. A text-only host cannot perform visual interpretation.
 
+For Linux/Windows machines doing CPU-only transcription, install the CPU build of PyTorch into that venv before installing Whisper. Use the command for your OS/Python from the [official PyTorch selector](https://pytorch.org/get-started/locally/) (CPU wheel index: `https://download.pytorch.org/whl/cpu`). A generic PyTorch installation can otherwise download large CUDA dependencies that this CPU-only helper does not use. macOS uses its normal supported PyTorch build. Keep this choice local to the venv; do not replace a project's existing GPU environment.
+
 Upstream sources:
 - yt-dlp: https://github.com/yt-dlp/yt-dlp (community downloader, not a YouTube official API). For YouTube install Deno 2.3+ or Node 22+ on PATH; the helper enables both and uses the bundled yt-dlp-ejs package from yt-dlp[default]. Some sites may still reject automated retrieval. Follow upstream documentation on real failures; do not promise universal support.
 - FFmpeg: https://ffmpeg.org/
