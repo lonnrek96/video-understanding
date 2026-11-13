@@ -1,21 +1,37 @@
-MIT License
+Free Use with Attribution License 1.0
 
-Copyright (c) 2026 all-video-mcp contributors
+Copyright (c) 2026 madebyteh (@lonnrek96)
+Project: https://github.com/lonnrek96/video-understanding
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is granted, without a license fee, to use, copy, modify, and
+redistribute this project's original code, skill instructions, and documentation
+(the "Software"), for personal or commercial purposes, subject to these conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Attribution is required. When you use or integrate the Software in a project,
+   product, or service, include the following credit in its README, documentation,
+   About page, or credits, in a place reasonably accessible to its users:
+
+   "Video Understanding by madebyteh (@lonnrek96)
+   https://github.com/lonnrek96/video-understanding"
+
+   For private use without shared documentation or a user-facing interface,
+   retaining this license and credit in your local copy is sufficient. Repeating
+   the credit in every AI response or generated video explanation is not required.
+
+2. Keep this license and the copyright notice in all copies or substantial
+   portions of the Software, including modified versions. Do not remove or
+   obscure the original author's credit. Additional credits may be added.
+
+3. If you distribute a modified version, identify that you have modified it.
+   Do not imply that the original author endorses your version or use.
+
+No trademark rights or rights to third-party dependencies, models, or media are
+granted by this license. Those materials remain subject to their own terms.
+This is a custom license, not the MIT License, and is not represented as an
+OSI-approved license.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+AUTHOR OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR ITS USE.

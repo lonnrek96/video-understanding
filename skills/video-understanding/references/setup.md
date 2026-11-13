@@ -5,11 +5,11 @@ Requires Python 3.10+ and FFmpeg (`ffmpeg`, `ffprobe`) on PATH. Use current upst
 Create an isolated environment outside the distributable folder:
 
 ```sh
-python3 -m venv ~/.local/share/all-video-mcp/venv
-~/.local/share/all-video-mcp/venv/bin/python -m pip install -U "yt-dlp[default]" openai-whisper
+python3 -m venv ~/.local/share/video-understanding/venv
+~/.local/share/video-understanding/venv/bin/python -m pip install -U "yt-dlp[default]" openai-whisper
 ```
 
-Set `VIDEO_PYTHON="$HOME/.local/share/all-video-mcp/venv/bin/python"` and use `"$VIDEO_PYTHON"` for the script. On Windows use a user-chosen venv and its `Scripts/python.exe`. Installation requires internet/disk space; Whisper depends on PyTorch. On CPU the default `base` model is slower than cloud inference; `--model tiny` is faster but less accurate, `small` is more accurate and heavier. Models download locally on first use. Do not set API keys: there are no paid inference API calls. User AI platform quotas still apply to interpreting frames. A text-only host cannot perform visual interpretation.
+Set `VIDEO_PYTHON="$HOME/.local/share/video-understanding/venv/bin/python"` and use `"$VIDEO_PYTHON"` for the script. On Windows use a user-chosen venv and its `Scripts/python.exe`. Installation requires internet/disk space; Whisper depends on PyTorch. On CPU the default `base` model is slower than cloud inference; `--model tiny` is faster but less accurate, `small` is more accurate and heavier. Models download locally on first use. Do not set API keys: there are no paid inference API calls. User AI platform quotas still apply to interpreting frames. A text-only host cannot perform visual interpretation.
 
 Upstream sources:
 - yt-dlp: https://github.com/yt-dlp/yt-dlp (community downloader, not a YouTube official API). For YouTube install Deno 2.3+ or Node 22+ on PATH; the helper enables both and uses the bundled yt-dlp-ejs package from yt-dlp[default]. Some sites may still reject automated retrieval. Follow upstream documentation on real failures; do not promise universal support.
@@ -20,6 +20,6 @@ Upstream sources:
 
 ## Sharing/installing
 
-Copy this entire skill directory as `all-video-mcp` into the agent's skills directory (Codex: `~/.codex/skills/all-video-mcp`; Claude Code: `~/.claude/skills/all-video-mcp`). Start a new session if needed. Other hosts must support skill instructions, local command execution and local image viewing; compatibility must be tested per host.
+Copy this entire skill directory as `video-understanding` into the agent's skills directory (Codex: `~/.codex/skills/video-understanding`; Claude Code: `~/.claude/skills/video-understanding`). Start a new session if needed. Other hosts must support skill instructions, local command execution and local image viewing; compatibility must be tested per host.
 
 Share only skill instructions/scripts/license, not downloaded videos, model caches, transcripts, cookies or local run output. Dependencies retain their own licenses; the skill does not redistribute their binaries or weights.

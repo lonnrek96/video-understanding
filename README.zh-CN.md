@@ -1,10 +1,10 @@
-# All Video MCP
+# Video Understanding
 
 [English](README.md)
 
 让支持图片理解的 AI 结合**真实影片画面、字幕和时间轴**，解释影片在说什么。支持可访问的影片链接及本机文件，不需要付费推理 API 或 API key。
 
-名称虽然有 MCP，这个项目实际提供的是 **agent skill，不是独立 MCP server**。脚本在本机准备素材，AI 再读取图片和字幕进行分析。这是社区项目，并非 Google 或 OpenAI 官方集成。
+这个项目提供的是 **agent skill**，不需要启动独立 MCP server。脚本在本机准备素材，AI 再读取图片和字幕进行分析。这是社区项目，并非 Google 或 OpenAI 官方集成。
 
 ## 能做什么
 
@@ -16,25 +16,25 @@
 
 ## 安装
 
-需要 Python **3.10+**、FFmpeg（`ffmpeg` 和 `ffprobe`），以及能执行本机命令、读取本机图片的 AI 工具。YouTube 另需 Deno 2.3+ 或 Node 22+。系统工具的安装见[环境设置](skills/all-video-mcp/references/setup.md)。
+需要 Python **3.10+**、FFmpeg（`ffmpeg` 和 `ffprobe`），以及能执行本机命令、读取本机图片的 AI 工具。YouTube 另需 Deno 2.3+ 或 Node 22+。系统工具的安装见[环境设置](skills/video-understanding/references/setup.md)。
 
 macOS / Linux：
 
 ```sh
-git clone https://github.com/lonnrek96/all-video-mcp.git
-cd all-video-mcp
-python3 -m venv "$HOME/.local/share/all-video-mcp/venv"
-"$HOME/.local/share/all-video-mcp/venv/bin/python" -m pip install -r requirements.txt
+git clone https://github.com/lonnrek96/video-understanding.git
+cd video-understanding
+python3 -m venv "$HOME/.local/share/video-understanding/venv"
+"$HOME/.local/share/video-understanding/venv/bin/python" -m pip install -r requirements.txt
 python3 tools/install.py --host codex
 ```
 
-安装工具只复制 skill，不会安装系统依赖、修改 host 配置或覆盖已有技能。Codex 支持 `CODEX_HOME`，默认安装到 `~/.codex/skills/all-video-mcp`。Claude Code 使用 `--host claude-code`；其他兼容工具可用 `--skills-dir /path/to/skills`。安装后刷新技能列表或开启新对话。其他 host 的完整行为尚未验证。
+安装工具只复制 skill，不会安装系统依赖、修改 host 配置或覆盖已有技能。Codex 支持 `CODEX_HOME`，默认安装到 `~/.codex/skills/video-understanding`。Claude Code 使用 `--host claude-code`；其他兼容工具可用 `--skills-dir /path/to/skills`。安装后刷新技能列表或开启新对话。其他 host 的完整行为尚未验证。
 
 Windows PowerShell（尚未实测）：安装 Python、FFmpeg 和 Node / Deno 后执行：
 
 ```powershell
-python -m venv "$env:LOCALAPPDATA\all-video-mcp\venv"
-& "$env:LOCALAPPDATA\all-video-mcp\venv\Scripts\python.exe" -m pip install -r requirements.txt
+python -m venv "$env:LOCALAPPDATA\video-understanding\venv"
+& "$env:LOCALAPPDATA\video-understanding\venv\Scripts\python.exe" -m pip install -r requirements.txt
 python tools/install.py --host codex
 ```
 
@@ -44,7 +44,7 @@ Whisper 首次使用会下载开放模型权重，需要本机储存空间和计
 
 对 AI 说：
 
-> 用 $all-video-mcp 完整解释这部影片，包括画面中的操作和字幕内容：https://www.youtube.com/watch?v=VIDEO_ID
+> 用 $video-understanding 完整解释这部影片，包括画面中的操作和字幕内容：https://www.youtube.com/watch?v=VIDEO_ID
 
 也可以直接说「帮我看这部影片并解释内容」。技能已启用自动选用，但是否选中仍取决于 host。也支持本机路径，例如 `/path/to/video.mp4`。
 
@@ -53,8 +53,8 @@ AI 应读取完整字幕、实际打开画面图片，并补看重要片段，�
 从 repo 手动准备素材：
 
 ```sh
-VIDEO_PYTHON="$HOME/.local/share/all-video-mcp/venv/bin/python"
-"$VIDEO_PYTHON" skills/all-video-mcp/scripts/prepare_video.py "影片链接或本机路径" --output "$HOME/video-evidence/run-001"
+VIDEO_PYTHON="$HOME/.local/share/video-understanding/venv/bin/python"
+"$VIDEO_PYTHON" skills/video-understanding/scripts/prepare_video.py "影片链接或本机路径" --output "$HOME/video-evidence/run-001"
 ```
 
 每次使用新的输出目录。`--subtitle captions.srt` 指定字幕；`--language zh` 优先选择中文字幕，或指定语音识别语言；`--interval 5` 加密抽帧；`--model tiny` 提高速度，但识别准确率较低。只有明确不需要转录时才使用 `--skip-asr`。更多参数见 `--help`。
@@ -73,14 +73,18 @@ VIDEO_PYTHON="$HOME/.local/share/all-video-mcp/venv/bin/python"
 
 ## 验证
 
-[验证纪录](skills/all-video-mcp/references/validation.md)列出了实际跑通的样片及尚未确认的范围。安装 FFmpeg 后可运行本机测试，不需要网络或下载模型：
+[验证纪录](skills/video-understanding/references/validation.md)列出了实际跑通的样片及尚未确认的范围。安装 FFmpeg 后可运行本机测试，不需要网络或下载模型：
 
 ```sh
-python3 -B -m unittest discover -s skills/all-video-mcp/scripts/tests -v
+python3 -B -m unittest discover -s skills/video-understanding/scripts/tests -v
 ```
 
 本技能由 SkillHub 维护，并在此独立分发；使用时不依赖 SkillHub CLI。
 
 ## 授权
 
-原始代码和指令采用 [MIT](LICENSE) 授权。外部工具、模型权重及影片保留各自的授权和权利；本项目不打包它们。
+原始代码、技能指令和文件采用自订的[免费使用且须署名授权 1.0](LICENSE)：可免费使用、修改及分发，包含商业用途，但必须保留作者署名。
+
+署名内容：**Video Understanding by madebyteh (@lonnrek96)** — https://github.com/lonnrek96/video-understanding
+
+复制或分发时保留授权文件，并在项目 README、说明文件、关于页或致谢处提供署名。私人本机使用保留原文件中的署名即可，不要求每次 AI 回答都重复署名；完整条款以 LICENSE 为准。外部工具、模型权重及影片保留各自的授权和权利；本项目不打包它们。

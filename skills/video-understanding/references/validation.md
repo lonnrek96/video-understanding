@@ -30,7 +30,7 @@ The above media/ASR trials ran locally without paid inference APIs or extra mode
 From the repository root, with Python and FFmpeg installed:
 
 ```sh
-python3 -B -m unittest discover -s skills/all-video-mcp/scripts/tests -v
+python3 -B -m unittest discover -s skills/video-understanding/scripts/tests -v
 ```
 
 From an installed skill directory:

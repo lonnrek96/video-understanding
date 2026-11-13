@@ -1,10 +1,10 @@
-# All Video MCP
+# Video Understanding
 
 [简体中文](README.zh-CN.md)
 
 An agent skill that helps a vision-capable AI explain videos using **actual frames and timestamped transcripts**. Accepts supported video links and local files. No paid inference API or API key is required.
 
-Despite the name, this is an **agent skill**, not a standalone MCP server. It prepares local evidence; your AI host reads the images and transcript and explains the video. Community project, not an official Google or OpenAI integration.
+This is an **agent skill** rather than a standalone MCP server. It prepares local evidence; your AI host reads the images and transcript and explains the video. Community project, not an official Google or OpenAI integration.
 
 ## What it does
 
@@ -16,23 +16,23 @@ Despite the name, this is an **agent skill**, not a standalone MCP server. It pr
 
 ## Install
 
-Requires Python **3.10+**, FFmpeg (`ffmpeg` and `ffprobe`) and a host that can execute local commands **and view local images**. YouTube also requires a supported JavaScript runtime, such as Deno 2.3+ or Node 22+. See [runtime setup](skills/all-video-mcp/references/setup.md).
+Requires Python **3.10+**, FFmpeg (`ffmpeg` and `ffprobe`) and a host that can execute local commands **and view local images**. YouTube also requires a supported JavaScript runtime, such as Deno 2.3+ or Node 22+. See [runtime setup](skills/video-understanding/references/setup.md).
 
 ```sh
-git clone https://github.com/lonnrek96/all-video-mcp.git
-cd all-video-mcp
-python3 -m venv "$HOME/.local/share/all-video-mcp/venv"
-"$HOME/.local/share/all-video-mcp/venv/bin/python" -m pip install -r requirements.txt
+git clone https://github.com/lonnrek96/video-understanding.git
+cd video-understanding
+python3 -m venv "$HOME/.local/share/video-understanding/venv"
+"$HOME/.local/share/video-understanding/venv/bin/python" -m pip install -r requirements.txt
 python3 tools/install.py --host codex
 ```
 
-The installer only copies the skill; it does not install system tools, change host configuration or overwrite an existing skill. Codex honors `CODEX_HOME`, otherwise uses `~/.codex/skills/all-video-mcp`. For Claude Code use `--host claude-code`; for another compatible host use `--skills-dir /path/to/skills`. Reload the host's skill catalog or start a new session if needed. Non-Codex host behavior remains unverified.
+The installer only copies the skill; it does not install system tools, change host configuration or overwrite an existing skill. Codex honors `CODEX_HOME`, otherwise uses `~/.codex/skills/video-understanding`. For Claude Code use `--host claude-code`; for another compatible host use `--skills-dir /path/to/skills`. Reload the host's skill catalog or start a new session if needed. Non-Codex host behavior remains unverified.
 
 Windows PowerShell: use Python 3.10+ and install FFmpeg/Node or Deno on PATH, then:
 
 ```powershell
-python -m venv "$env:LOCALAPPDATA\all-video-mcp\venv"
-& "$env:LOCALAPPDATA\all-video-mcp\venv\Scripts\python.exe" -m pip install -r requirements.txt
+python -m venv "$env:LOCALAPPDATA\video-understanding\venv"
+& "$env:LOCALAPPDATA\video-understanding\venv\Scripts\python.exe" -m pip install -r requirements.txt
 python tools/install.py --host codex
 ```
 
@@ -42,19 +42,19 @@ Windows instructions have not been tested. Whisper downloads open model weights 
 
 Ask your agent:
 
-> Use $all-video-mcp to explain this video in detail: https://www.youtube.com/watch?v=VIDEO_ID
+> Use $video-understanding to explain this video in detail: https://www.youtube.com/watch?v=VIDEO_ID
 
 Or simply ask it to watch and explain a video. Automatic invocation is enabled for supporting hosts; actual selection depends on the host. For local files:
 
-> Use $all-video-mcp to explain /path/to/video.mp4, including the on-screen steps.
+> Use $video-understanding to explain /path/to/video.mp4, including the on-screen steps.
 
 The agent should read the complete transcript, open the actual frame images, inspect important moments more densely and provide a timestamped account. Merely generating files does not mean the video has been visually understood.
 
 To prepare evidence manually, from this checkout:
 
 ```sh
-VIDEO_PYTHON="$HOME/.local/share/all-video-mcp/venv/bin/python"
-"$VIDEO_PYTHON" skills/all-video-mcp/scripts/prepare_video.py "VIDEO_URL_OR_PATH" --output "$HOME/video-evidence/run-001"
+VIDEO_PYTHON="$HOME/.local/share/video-understanding/venv/bin/python"
+"$VIDEO_PYTHON" skills/video-understanding/scripts/prepare_video.py "VIDEO_URL_OR_PATH" --output "$HOME/video-evidence/run-001"
 ```
 
 Use a new output directory for every run. `--subtitle captions.srt` supplies local captions; `--language en` prefers English captions or sets the ASR language; `--interval 5` samples more densely; `--model tiny` runs faster with lower recognition accuracy. Set `--skip-asr` only when a transcript is intentionally unnecessary. Run `--help` for all options.
@@ -73,14 +73,18 @@ The scripts use no paid API or cloud inference. Your AI host may require a subsc
 
 ## Validation and development
 
-[Validation record](skills/all-video-mcp/references/validation.md) distinguishes short sample evidence from unverified platform/host coverage. To run the local tests, install FFmpeg and use Python; no model or network download is needed:
+[Validation record](skills/video-understanding/references/validation.md) distinguishes short sample evidence from unverified platform/host coverage. To run the local tests, install FFmpeg and use Python; no model or network download is needed:
 
 ```sh
-python3 -B -m unittest discover -s skills/all-video-mcp/scripts/tests -v
+python3 -B -m unittest discover -s skills/video-understanding/scripts/tests -v
 ```
 
 The skill source is maintained alongside SkillHub and distributed here as a standalone repository. This repository has no dependency on the SkillHub CLI.
 
 ## License
 
-[MIT](LICENSE) for the original code and instructions. External tools, weights and source videos retain their own licenses and rights. No binaries, model weights or sample videos are bundled.
+[Free Use with Attribution License 1.0](LICENSE): use, modify and redistribute the original code/instructions without a license fee, including commercial use, with author credit required. This is a custom license.
+
+Required credit: **Video Understanding by madebyteh (@lonnrek96)** — https://github.com/lonnrek96/video-understanding
+
+Keep the license in copies and include the credit in your project README, documentation, About page or credits. Private local use only needs to retain the notice; individual AI answers do not need repeated attribution. See LICENSE for the full terms. External tools, weights and source videos retain their own licenses and rights. No binaries, model weights or sample videos are bundled.

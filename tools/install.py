@@ -18,8 +18,8 @@ def main():
         root = Path(os.environ.get('CODEX_HOME') or Path.home() / '.codex') / 'skills'
     else:
         root = Path.home() / '.claude' / 'skills'
-    target = root / 'all-video-mcp'
-    source = Path(__file__).resolve().parents[1] / 'skills' / 'all-video-mcp'
+    target = root / 'video-understanding'
+    source = Path(__file__).resolve().parents[1] / 'skills' / 'video-understanding'
     try:
         # lexists also catches dangling symlinks; copytree refuses existing targets.
         if os.path.lexists(target):

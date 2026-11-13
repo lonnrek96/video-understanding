@@ -1,15 +1,15 @@
 ---
-name: all-video-mcp
+name: video-understanding
 description: Watch and understand linked or local videos using actual frames and timestamped subtitles or local speech transcription, without paid APIs. Use when asked to watch, explain, summarize or understand a video, review a visual tutorial, or 看影片、理解影片、解說影片內容。
 ---
 
-# All Video MCP
+# Video Understanding
 
 Prepare local evidence, then interpret it with the current host's vision tools. No API keys or external inference services. Host AI access, compute, storage and internet are not necessarily free. This is a community skill, not an official Google/OpenAI integration.
 
 ## When to use
 
-Use this skill by default when the user needs video understanding, including a video URL with a request to explain its content. Read both frames and transcript; do not silently substitute a transcript-only answer. A link used only as a citation or a request to edit/export video does not itself require this workflow. The name identifies an agent skill; no standalone MCP server is bundled.
+Use this skill by default when the user needs video understanding, including a video URL with a request to explain its content. Read both frames and transcript; do not silently substitute a transcript-only answer. A link used only as a citation or a request to edit/export video does not itself require this workflow. No standalone MCP server is bundled.
 
 ## Prepare
 
@@ -43,3 +43,7 @@ For changing slides, code, charts, demonstrations or ambiguities, inspect nearby
 Reply in the user's language. For a full explanation, give an overall account, chronological sections with timestamps, key arguments/examples, visual-only details, practical steps and the creator's conclusion. Preserve useful specifics rather than reducing everything to broad themes. Include a short evidence note with transcript source, sampled time coverage, and any missing/uncertain content. A concise summary request can be shorter. Do not automatically save the explanation to public services or publish the downloaded media.
 
 For public sharing and installation, read [sharing](references/sharing.md). Existing verification and unverified coverage are recorded in [validation](references/validation.md).
+
+## Attribution
+
+Free use, modification and redistribution require author credit under [LICENSE](LICENSE). Retain the license and credit madebyteh (@lonnrek96), linking to https://github.com/lonnrek96/video-understanding, in project documentation, an About page or credits when integrating or distributing. Private local use may retain the notice in the local copy. Individual video explanations do not need repeated attribution.
