@@ -1,0 +1,7 @@
+interface:
+  display_name: "All Video MCP"
+  short_description: "Read video frames and transcripts without paid APIs"
+  default_prompt: "Use $all-video-mcp to explain this video with timestamped visual and transcript evidence."
+
+policy:
+  allow_implicit_invocation: true

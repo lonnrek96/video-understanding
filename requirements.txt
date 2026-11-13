@@ -1,0 +1,4 @@
+# Use recent yt-dlp releases: website extractors change frequently.
+# Validated with yt-dlp 2026.10.26 and openai-whisper 20250625.
+yt-dlp[default]>=2026.10.26
+openai-whisper>=20250625
