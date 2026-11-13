@@ -1,0 +1,59 @@
+name: Portable checks
+on:
+  push:
+    paths:
+      - 'skills/**'
+      - 'tools/**'
+      - '.github/workflows/portable-checks.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pipeline:
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Install Linux FFmpeg
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - name: Install Windows FFmpeg
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if (-not (Get-Command ffmpeg -ErrorAction SilentlyContinue)) {
+            choco install ffmpeg --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - run: python -m pip install 'Pillow>=10' 'yt-dlp[default]'
+      - name: Require real media dependencies
+        run: python -c "import shutil; assert shutil.which('ffmpeg') and shutil.which('ffprobe'), 'FFmpeg missing; integration tests must not silently skip'"
+      - name: Check captions, frames, recovery and bounds
+        run: python -B -m unittest discover -s skills/video-understanding/scripts/tests -v
+      - name: Check both installation layouts and overwrite refusal
+        shell: python
+        run: |
+          import hashlib, pathlib, subprocess, sys, tempfile
+          def snapshot(root):
+              return {str(f.relative_to(root)): hashlib.sha256(f.read_bytes()).hexdigest()
+                      for f in root.rglob('*') if f.is_file()}
+          source = snapshot(pathlib.Path('skills/video-understanding'))
+          with tempfile.TemporaryDirectory() as tmp:
+              for host in ('codex', 'claude-code'):
+                  root = pathlib.Path(tmp) / host
+                  args = [sys.executable, 'tools/install.py', '--host', host, '--skills-dir', str(root)]
+                  subprocess.run(args, check=True)
+                  target = root / 'video-understanding'
+                  assert snapshot(target) == source
+                  assert subprocess.run(args, capture_output=True).returncode != 0
+                  assert snapshot(target) == source

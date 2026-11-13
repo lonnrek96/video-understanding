@@ -56,6 +56,13 @@ class PipelineTests(unittest.TestCase):
 
 
 class RecoveryTests(unittest.TestCase):
+    def test_out_of_range_asr_is_flagged_without_rewriting_evidence(self):
+        segments = [{'start': 9.76, 'end': 23.86, 'text': 'fortress'}]
+        self.assertTrue(any('outside the video' in w for w in video.asr_warnings(segments, 10.03)))
+        self.assertEqual(segments[0]['end'], 23.86)
+        self.assertFalse(any('outside the video' in w for w in video.asr_warnings(
+            [{'start': 0, 'end': 5, 'text': 'speech'}], 10)))
+
     def test_download_selects_format_before_metadata_and_checks_real_resolution(self):
         from types import SimpleNamespace
         from unittest.mock import patch
@@ -68,7 +75,7 @@ class RecoveryTests(unittest.TestCase):
             def __exit__(self, *args): pass
             def extract_info(self, *args, **kwargs):
                 assert 'height<=720' in self.opts['format']
-                return {'duration': 10, 'title': 'fixture', 'chapters': []}
+                return {'duration': 10, 'height': 720, 'title': 'fixture', 'chapters': []}
             def process_info(self, info):
                 Path(self.opts['outtmpl'].replace('%(ext)s', 'mp4')).write_bytes(b'fixture')
         with tempfile.TemporaryDirectory() as tmp, patch.dict(sys.modules, {'yt_dlp': SimpleNamespace(YoutubeDL=FakeDownloader)}):
@@ -77,6 +84,26 @@ class RecoveryTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, '1080p exceeds 720p'):
                     video.acquire('https://example.invalid/video', Path(tmp), args)
             self.assertTrue(all('height<=720' in opts['format'] for opts in options))
+
+    def test_unknown_remote_resolution_is_probed_before_download(self):
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        class DirectDownloader:
+            def __init__(self, opts): pass
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def extract_info(self, *args, **kwargs):
+                return {'url': 'https://example.invalid/movie.mp4'}
+        with patch.dict(sys.modules, {'yt_dlp': SimpleNamespace(YoutubeDL=DirectDownloader)}):
+            for height in (480, 1080, 0):
+                with self.subTest(height=height), patch.object(video, 'probe', return_value={
+                        'streams': [{'codec_type': 'video', 'height': height}], 'format': {'duration': '52'}}):
+                    if height == 480:
+                        info = video.inspect_remote('https://example.invalid/movie.mp4', 60)
+                        self.assertEqual((info['height'], info['duration']), (480, 52))
+                    else:
+                        with self.assertRaisesRegex(ValueError, 'no media download started'):
+                            video.inspect_remote('https://example.invalid/movie.mp4', 60)
 
     def test_duration_diagnostics_distinguish_unknown_from_too_long(self):
         with self.assertRaisesRegex(ValueError, '01:04:02.*01:00:00.*--max-duration 3843'):

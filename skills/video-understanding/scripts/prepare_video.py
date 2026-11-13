@@ -147,7 +147,7 @@ def download_options():
     return dict(quiet=True, noprogress=True, noplaylist=True, socket_timeout=30,
                 retries=2, cachedir=False, skip_download=True, ignoreerrors=False,
                 logger=DownloadLog(), js_runtimes={'deno': {}, 'node': {}},
-                format='bv*[height<=720]+ba/b[height<=720]', max_filesize=2 * 1024 ** 3)
+                format='bv*[height<=720]+ba/b[height<=?720]', max_filesize=2 * 1024 ** 3)
 
 
 def validate_duration(duration, maximum, remote=False):
@@ -169,6 +169,21 @@ def inspect_remote(url, maximum):
         raise ValueError('Supply a single video URL, not a playlist')
     if info.get('is_live') or info.get('live_status') in ('is_live', 'is_upcoming'):
         raise ValueError('Live/upcoming streams are not supported')
+    # Generic MP4 extractors often omit dimensions. Probe before downloading;
+    # allowing unknown metadata must never relax the actual 720p boundary.
+    for selected in info.get('requested_formats') or [info]:
+        if selected.get('vcodec') == 'none' or selected.get('height'):
+            continue
+        if not re.match(r'^https?://', selected.get('url', '')):
+            raise ValueError('Selected video resolution is unknown; no media download started')
+        details = probe(selected['url'])
+        streams = [s for s in details.get('streams', []) if s.get('codec_type') == 'video']
+        height = max((s.get('height', 0) for s in streams), default=0)
+        if not height or height > 720:
+            raise ValueError('Selected video resolution is unknown or exceeds 720p; no media download started')
+        selected['height'] = height
+        if selected is info and not info.get('duration'):
+            info['duration'] = float(details.get('format', {}).get('duration', 0))
     duration = info.get('duration')
     if not duration and re.match(r'^https?://', info.get('url', '')):
         duration = float(probe(info['url']).get('format', {}).get('duration', 0))
@@ -231,6 +246,14 @@ def acquire(url, output, args):
     return dict(media=str(media[0]), subtitle=subtitle, source=source, metadata=metadata, warnings=warnings)
 
 
+def asr_warnings(segments, duration):
+    warnings = ['Local ASR words and timestamps are approximate; verify names/actions against frames. Silence/music may produce invented text.']
+    if any(not math.isfinite(s['start']) or not math.isfinite(s['end']) or
+           s['start'] < 0 or s['end'] <= s['start'] or s['end'] > duration + 0.5 for s in segments):
+        warnings.append('ASR timestamps extend outside the video or are invalid; raw output is retained for review and must not be treated as reliable speech.')
+    return warnings
+
+
 def transcribe(media, output, args, subtitle, source, checkpoint):
     cached = checkpoint.read('transcript')
     if cached is not None:
@@ -255,6 +278,7 @@ def transcribe(media, output, args, subtitle, source, checkpoint):
             segments = [dict(start=float(s['start']), end=float(s['end']), text=s['text'].strip())
                         for s in result['segments'] if s['text'].strip()]
             source = f'local-whisper:{args.model}:{result.get("language", "unknown")}'
+            warnings.extend(asr_warnings(segments, float(probe(media)['format']['duration'])))
         else:
             warnings.append('Video has no audio track and no supplied captions.')
     if not segments:

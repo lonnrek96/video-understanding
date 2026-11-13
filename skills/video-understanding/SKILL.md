@@ -36,7 +36,7 @@ If a site requires login, DRM, payment, or unsupported access, report the blocke
 ```
 
 For changing slides, code, charts, demonstrations or ambiguities, inspect nearby timestamps and reduce the interval. `--interval 5` on preparation provides denser coverage; `--max-frames` bounds the batch. The manifest reports effective spacing and scene samples, so disclose any coarse sampling. Do not claim every frame was viewed or short actions were certainly captured. Purely visual/no-audio media are valid; mark the transcript unavailable. Whisper can hallucinate on silence/music: cross-check repetitive or implausible text with audio and frames.
-4. Align spoken claims with what the frames show. Separate creator statements, your interpretation and independently verified facts. Do not invent unreadable names, numbers or steps. If only part was inspected, state the time range and finish remaining necessary inspection before claiming whole-video coverage.
+4. Align spoken claims with what the frames show. ASR timestamps are approximate and can drift across music or pauses; locate important actions in nearby frames rather than using transcript timing as proof. Review out-of-range timestamp warnings before quoting speech. Separate creator statements, your interpretation and independently verified facts. Do not invent unreadable names, numbers or steps. If only part was inspected, state the time range and finish remaining necessary inspection before claiming whole-video coverage.
 
 ## Explain
 
